@@ -56,10 +56,12 @@ jobs:
           docker compose logs backend
           echo "=== Frontend Logs ==="
           docker compose logs frontend
+          echo "=== Cypress Logs ==="
+          docker compose logs cypress || echo "No Cypress logs available"
 
       - name: Stop services
         if: always()
-        run: docker compose down
+        run: docker compose down -v
 
   lint:
     runs-on: ubuntu-latest
