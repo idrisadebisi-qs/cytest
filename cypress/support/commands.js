@@ -2,10 +2,14 @@
 // Custom commands for Cypress tests
 // ***********************************************
 
+// Determine API URL based on environment
+// In Docker: use container name, Local: use localhost
+const API_URL = Cypress.env('API_URL') || 'http://localhost:5000'
+
 // Command to wait for backend to be ready
 Cypress.Commands.add('waitForBackend', () => {
   cy.request({
-    url: 'http://localhost:5000/api/health',
+    url: `${API_URL}/api/health`,
     retryOnStatusCodeFailure: true,
     timeout: 30000,
   }).its('status').should('eq', 200)
@@ -15,17 +19,17 @@ Cypress.Commands.add('waitForBackend', () => {
 Cypress.Commands.add('createItem', (name, description = '') => {
   return cy.request({
     method: 'POST',
-    url: 'http://localhost:5000/api/items',
+    url: `${API_URL}/api/items`,
     body: { name, description },
   })
 })
 
 // Command to delete all items (for test cleanup)
 Cypress.Commands.add('deleteAllItems', () => {
-  cy.request('http://localhost:5000/api/items').then((response) => {
+  cy.request(`${API_URL}/api/items`).then((response) => {
     const items = response.body
     items.forEach((item) => {
-      cy.request('DELETE', `http://localhost:5000/api/items/${item.id}`)
+      cy.request('DELETE', `${API_URL}/api/items/${item.id}`)
     })
   })
 })

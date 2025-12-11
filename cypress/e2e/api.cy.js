@@ -1,5 +1,5 @@
 describe('Backend API Tests', () => {
-  const API_URL = 'http://localhost:5000'
+  const API_URL = Cypress.env('API_URL') || 'http://localhost:5000'
 
   before(() => {
     // Wait for backend to be ready

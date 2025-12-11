@@ -21,8 +21,10 @@ docker compose up -d
 |---------|-------------|
 | `make up` | Start all services |
 | `make down` | Stop all services |
-| `make test` | Run Cypress tests |
-| `make test-ui` | Open Cypress interactive mode |
+| `make test` | Run Cypress tests locally (needs npm install) |
+| `make test-docker` | Run Cypress tests in Docker |
+| `make test-ci` | Run tests in CI mode (full cycle) |
+| `make test-ui` | Open Cypress interactive mode (local) |
 | `make logs` | View all logs |
 | `make restart` | Restart services |
 | `make clean` | Clean everything |
@@ -36,7 +38,11 @@ docker compose up -d
 
 ## 🧪 Testing
 
+### Local Testing (requires Node.js)
 ```bash
+# Install dependencies first
+npm install
+
 # Run all tests (headless)
 npm run cypress:run
 
@@ -45,6 +51,21 @@ npm run cypress:open
 
 # Run specific test
 npx cypress run --spec "cypress/e2e/items.cy.js"
+```
+
+### Docker Testing (no Node.js required)
+```bash
+# Start services first
+docker compose up -d
+
+# Run tests in container
+docker compose run --rm cypress
+
+# Or use Make
+make test-docker
+
+# Full CI-like test (starts, tests, stops)
+make test-ci
 ```
 
 ## 🐳 Docker Commands

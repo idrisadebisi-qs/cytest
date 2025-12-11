@@ -22,11 +22,20 @@ down: ## Stop all services
 
 restart: down up ## Restart all services
 
-test: ## Run Cypress tests
+test: ## Run Cypress tests locally (requires npm install)
 	npm run cypress:run
 
-test-ui: ## Run Cypress tests in interactive mode
+test-ui: ## Run Cypress tests in interactive mode locally
 	npm run cypress:open
+
+test-docker: ## Run Cypress tests in Docker container
+	docker compose run --rm cypress
+
+test-ci: up ## Run tests in CI mode (Docker)
+	@echo "Waiting for services to be ready..."
+	@sleep 10
+	docker compose run --rm cypress
+	@EXIT_CODE=$$?; docker compose down; exit $$EXIT_CODE
 
 logs: ## Show logs from all services
 	docker compose logs -f

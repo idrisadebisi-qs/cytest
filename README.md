@@ -54,10 +54,24 @@ python -m http.server 3000
 ```
 
 #### Run Cypress Tests
+
+**Option 1: Run locally (requires Node.js installed)**
 ```bash
 npm install
 npm run cypress:open  # Interactive mode
 npm run cypress:run   # Headless mode
+```
+
+**Option 2: Run in Docker (no Node.js required)**
+```bash
+# Make sure services are running first
+docker compose up -d
+
+# Run tests in container
+docker compose run --rm cypress
+
+# Or use Make
+make test-docker
 ```
 
 ## API Endpoints

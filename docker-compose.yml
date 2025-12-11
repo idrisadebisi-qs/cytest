@@ -31,6 +31,28 @@ services:
     networks:
       - app-network
 
+  cypress:
+    image: cypress/included:13.6.0
+    container_name: cypress-tests
+    depends_on:
+      backend:
+        condition: service_healthy
+      frontend:
+        condition: service_started
+    environment:
+      - CYPRESS_baseUrl=http://frontend
+      - CYPRESS_API_URL=http://backend:5000
+    working_dir: /e2e
+    volumes:
+      - ./cypress:/e2e/cypress
+      - ./cypress.config.js:/e2e/cypress.config.js
+      - ./cypress/videos:/e2e/cypress/videos
+      - ./cypress/screenshots:/e2e/cypress/screenshots
+    networks:
+      - app-network
+    profiles:
+      - test
+
 networks:
   app-network:
     driver: bridge
