@@ -2,43 +2,97 @@
 
 A full-stack application with Flask backend, vanilla JavaScript frontend, Cypress E2E tests, and Docker support.
 
-## Project Structure
-
-```
-cytest/
-├── backend/          # Flask API application
-├── frontend/         # Static HTML/CSS/JS frontend
-├── cypress/          # Cypress E2E tests
-├── .github/          # GitHub Actions workflows
-├── docker-compose.yml
-└── README.md
-```
-
 ## Prerequisites
 
 - Docker & Docker Compose
-- Node.js (for local Cypress tests)
-- Python 3.11+ (for local development)
 
-## Quick Start
 
-### Using Docker Compose
+## 🚀 Quick Start
 
 ```bash
-# Start all services
 docker compose up -d
-
-# Stop all services
-docker compose down
 ```
 
-The application will be available at:
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:5000
+## 🌐 Service URLs
 
-### Local Development
+- **Frontend**: http://localhost:3000
+- **Backend API**: http://localhost:5000
+- **Health Check**: http://localhost:5000/api/health
 
-#### Backend
+## 🧪 Testing
+
+
+### Docker Testing (no Node.js required)
+```bash
+# Start services first
+docker compose up -d
+
+# Run tests in container
+docker compose run --rm cypress
+
+# Or use Make
+make test-docker
+
+# Full CI-like test (starts, tests, stops)
+make test-ci
+```
+
+## 🐳 Docker Commands
+
+```bash
+# Start services
+docker compose up -d
+
+# Stop services
+docker compose down
+
+# View logs
+docker compose logs -f
+
+# Rebuild images
+docker compose build --no-cache
+
+# Check service status
+docker compose ps
+```
+
+## 🔍 API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/health` | Health check |
+| GET | `/api/items` | Get all items |
+| GET | `/api/items/:id` | Get item by ID |
+| POST | `/api/items` | Create new item |
+| DELETE | `/api/items/:id` | Delete item |
+
+## 📦 Project Structure
+
+```
+cytest/
+├── backend/           # Flask API
+│   ├── app.py
+│   ├── Dockerfile
+│   └── requirements.txt
+├── frontend/          # HTML/CSS/JS
+│   ├── index.html
+│   ├── app.js
+│   ├── styles.css
+│   ├── Dockerfile
+│   └── nginx.conf
+├── cypress/           # E2E tests
+│   ├── e2e/
+│   └── support/
+├── .github/
+│   └── workflows/
+│       └── ci.yml     # GitHub Actions
+├── docker-compose.yml
+└── cypress.config.js
+```
+
+## 🔧 Development
+
+### Local Backend Development
 ```bash
 cd backend
 python -m venv venv
@@ -47,59 +101,54 @@ pip install -r requirements.txt
 python app.py
 ```
 
-#### Frontend
+### Local Frontend Development
 ```bash
 cd frontend
 python -m http.server 3000
 ```
 
-#### Run Cypress Tests
+## 📤 Push to GitHub
 
-**Option 1: Run locally (requires Node.js installed)**
 ```bash
-npm install
-npm run cypress:open  # Interactive mode
-npm run cypress:run   # Headless mode
+# Create repo on GitHub, then:
+git remote add origin https://github.com/USERNAME/REPO.git
+git push -u origin main
 ```
 
-**Option 2: Run in Docker (no Node.js required)**
+See `GITHUB_SETUP.md` for detailed instructions.
+
+## 🐛 Troubleshooting
+
+### Services won't start
 ```bash
-# Make sure services are running first
-docker compose up -d
+# Check if ports are in use
+lsof -i :3000
+lsof -i :5000
 
-# Run tests in container
-docker compose run --rm cypress
-
-# Or use Make
-make test-docker
+# Clean everything and restart
+make clean
+make up
 ```
 
-## API Endpoints
-
-- `GET /api/health` - Health check endpoint
-- `GET /api/items` - Get all items
-- `POST /api/items` - Create a new item
-- `GET /api/items/:id` - Get item by ID
-- `DELETE /api/items/:id` - Delete item by ID
-
-## CI/CD
-
-GitHub Actions workflow automatically runs on push/PR:
-1. Builds Docker images
-2. Starts services with docker-compose
-3. Runs Cypress E2E tests
-4. Reports test results
-
-## Testing
-
-Run tests locally:
+### Tests failing
 ```bash
-# Start services
-docker compose up -d
+# Check service health
+make health
 
-# Run Cypress tests
-npm run cypress:run
+# View logs
+make logs
 
-# Stop services
-docker compose down
+# Restart services
+make restart
 ```
+
+### CORS errors
+- Backend has CORS enabled for all origins
+- Frontend should point to `http://localhost:5000` for local development
+
+## 📝 Notes
+
+- The backend uses an in-memory data store (resets on restart)
+- Cypress tests create and delete test data
+- GitHub Actions run automatically on push/PR to main or develop branches
+- Docker images are built for production use with Gunicorn and Nginx
