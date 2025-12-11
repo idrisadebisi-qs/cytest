@@ -1,0 +1,21 @@
+{
+  "name": "flask-cypress-app",
+  "version": "1.0.0",
+  "description": "Flask backend with frontend and Cypress E2E tests",
+  "scripts": {
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run",
+    "test": "cypress run"
+  },
+  "keywords": [
+    "flask",
+    "cypress",
+    "e2e",
+    "testing"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "cypress": "^13.6.0"
+  }
+}
